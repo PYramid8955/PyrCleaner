@@ -125,12 +125,12 @@ async def on_message(message):
                                            934870083589775470):
                     await message.delete()
                     await message.author.timeout(
-                        timedelta(hours=1),
+                        timedelta(minutes=10),
                         reason=
                         f'Said `{message.content.replace(i, f"///{i}///")}`.'
                     )
                     await message.channel.send(
-                        f'<@{message.author.id}> was muted for a hour.'
+                        f'<@{message.author.id}> was muted for 10 minutes.'
                     )
                     return
     except:
@@ -186,7 +186,7 @@ async def unmute(interaction: Interaction, id: str = idS):
                       force_global=True)
 async def addcuss(interaction: Interaction, cuss: str = st):
     try:
-        if interaction.user.id in [542741572169629704, 758350007476289587]:
+        if interaction.user.id in [542741572169629704, 758350007476289587, 831269725665361930]:
             cuss = cuss.lower()
             with open('db', 'r') as f:
     			db = json.loads(f.read())
@@ -215,7 +215,7 @@ async def addcuss(interaction: Interaction, cuss: str = st):
                       force_global=True)
 async def recuss(interaction: Interaction, cuss: str = st):
     try:
-        if interaction.user.id in [542741572169629704, 758350007476289587]:
+        if interaction.user.id in [542741572169629704, 758350007476289587, 831269725665361930]:
             cuss = cuss.lower()
             with open('db', 'r') as f:
     			db = json.loads(f.read())
@@ -256,7 +256,7 @@ async def on_raw_reaction_add(reaction):
 @client.slash_command(name='react',
                       description='React with an animated emoji!',
                       force_global=True)
-async def slash(
+async def react(
     interaction: Interaction,
     Emoji: str = nextcord.SlashOption(
         name='emj',
@@ -286,6 +286,32 @@ async def slash(
     except:
         pass
     await interaction.send(f'...', delete_after=0)
+
+@client.message_command(name="addcuss",force_global=True)
+async def message_addcuss(interaction: Interaction):
+	try:
+        if interaction.user.id in [542741572169629704, 758350007476289587, 831269725665361930]:
+            cuss = interaction.message.content.lower()
+            with open('db', 'r') as f:
+    			db = json.loads(f.read())
+            if len(cuss.split()) == 1:
+                if not cuss in db['cuss']:
+                    db['cuss'].append(cuss)
+                    with open('db', 'w') as f:
+    					f.write(json.dumps(db))
+                    await interaction.send(
+                        f'Done, `{cuss}` was added to the list.',
+                        ephemeral=True)
+                else:
+                    await interaction.send(f'`{cuss}` is already in the list.',
+                                           ephemeral=True)
+            else:
+                await interaction.send(f'Only one word accepted.',
+                                       ephemeral=True)
+        else:
+            await interaction.send('You cannot use this.', ephemeral=True)
+    except:
+        await interaction.send('ERROR.', ephemeral=True)
 
 
 TOKEN = os.environ.get("TOKEN")
