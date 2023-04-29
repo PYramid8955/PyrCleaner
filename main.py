@@ -12,7 +12,7 @@ idS = nextcord.SlashOption(name='id',
                            description='The Id of the person you want to mute.',
                            required=True)
 
-ore = nextcord.SlashOption(name='ore',
+hours = nextcord.SlashOption(name='hours',
                            description='For how many hours?. (a day = 24 hours)',
                            required=True)
 
@@ -143,7 +143,7 @@ async def on_message(message):
     force_global=True)
 async def mute(interaction: Interaction,
                id: str = idS,
-               timp: str = ore,
+               timp: str = hours,
                why: str = why):
 
     if interaction.permissions.administrator or interaction.user.id == 542741572169629704:
